@@ -1,0 +1,231 @@
+//this defines the theme variables for the glass effect and colors
+:host {
+  --glass-bg: rgba(31, 31, 31, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --hover-bg: rgba(74, 158, 255, 0.1);
+  --primary-color: #4a9eff;
+}
+
+//this sets up the main background gradient
+ion-content {
+  --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+//this configures the main container layout
+.gpt-container {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+//this styles the glass effect card container
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin-bottom: 2rem;
+}
+
+//this styles the main title text
+.title {
+  color: #3498db;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+//this styles the subtitle text
+.subtitle {
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+//this configures the search input container
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+}
+
+//this styles the custom searchbar
+.custom-searchbar {
+  --background: rgba(255, 255, 255, 0.1);
+  --color: #ffffff;
+  --placeholder-color: #94a3b8;
+  --icon-color: #3498db;
+  --border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+//this styles the recommendation button
+.get-recommendations-btn {
+  --background: #3498db;
+  --background-hover: #2980b9;
+  --border-radius: 12px;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+}
+
+//this configures the grid layout for results
+.results-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+//this styles individual anime cards
+.anime-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  animation: fadeIn 0.5s ease forwards;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  //this styles the anime image container
+  .anime-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    //this styles the genre tags overlay
+    .genre-tags {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+
+      .tag {
+        background: rgba(52, 152, 219, 0.8);
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: white;
+      }
+    }
+  }
+
+  //this styles the anime information section
+  .anime-info {
+    padding: 1rem;
+
+    h3 {
+      color: #ffffff;
+      margin: 0 0 0.5rem 0;
+      font-size: 1.2rem;
+    }
+
+    .description {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+  }
+
+  //this styles the clickable content area
+  .anime-content {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+//this defines the fade-in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+//this handles responsive layout for tablets
+@media (max-width: 768px) {
+  .gpt-container {
+    padding: 16px;
+  }
+
+  .search-section {
+    .header-content {
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .anime-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+//this configures responsive layouts for different screen sizes
+@media (min-width: 1400px) {
+  .results-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1399px) {
+  .results-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .results-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .results-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+//this styles the add to list button
+.add-to-list-btn {
+  --background: transparent;
+  --color: #4a90e2;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin: 10px;
+  --ripple-color: rgba(74, 144, 226, 0.1);
+  
+  &:hover {
+    --background: rgba(74, 144, 226, 0.1);
+  }
+}

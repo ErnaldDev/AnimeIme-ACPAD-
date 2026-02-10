@@ -1,0 +1,79 @@
+<!-- Header section with back navigation -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ userProfile?.username }}'s Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Main content section -->
+<ion-content>
+  <!-- Profile container with user information -->
+  <div class="profile-container" *ngIf="userProfile">
+    <!-- User Info Section -->
+    <div class="user-info">
+      <h2>{{ userProfile.username }}</h2>
+      <p>Anime in list: {{ animeList.length }}</p>
+    </div>
+
+    <!-- Anime List Section with sorting and filtering -->
+    <div class="anime-list">
+      <h3>Anime List</h3>
+      
+      <!-- List Header with column titles and sorting options -->
+      <div class="list-header">
+        <div class="col">#</div>
+        <div class="col">Image</div>
+        <div class="col">Title</div>
+        <div class="col score-header" (click)="sortByRating()">
+          Score
+          <ion-icon [name]="sortDirection === 'asc' ? 'caret-up' : sortDirection === 'desc' ? 'caret-down' : 'swap-vertical'" 
+                    class="sort-icon">
+          </ion-icon>
+        </div>
+        <div class="col">Progress</div>
+        <div class="col">Status</div>
+        <div class="col">Added</div>
+        <div class="col actions">Actions</div>
+      </div>
+
+      <!-- List Content with anime entries -->
+      <div class="list-content">
+        <!-- Individual anime row -->
+        <div class="list-row" *ngFor="let anime of animeList; let i = index">
+          <div class="col">{{ i + 1 }}</div>
+          <div class="col image-col">
+            <img [src]="anime.image" [alt]="anime.title">
+          </div>
+          <div class="col title">{{ anime.title }}</div>
+          <div class="col score">{{ anime.rating }}/10</div>
+          <div class="col">{{ anime.progress }}/{{ anime.totalEpisodes }}</div>
+          <!-- Status badge with dynamic styling -->
+          <div class="col status" [ngClass]="anime.status.toLowerCase().replace(' ', '-')">
+            {{ anime.status }}
+          </div>
+          <div class="col">{{ anime.addedAt.toDate() | date:'short' }}</div>
+          <!-- Action buttons (only visible on own profile) -->
+          <div class="col actions" *ngIf="isOwnProfile">
+            <ion-button fill="clear" color="danger" (click)="removeAnime(anime.id)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading state container -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner></ion-spinner>
+    <p>Loading profile...</p>
+  </div>
+
+  <!-- Not found state container -->
+  <div class="not-found-container" *ngIf="!isLoading && !userProfile">
+    <p>Profile not found</p>
+  </div>
+</ion-content> 

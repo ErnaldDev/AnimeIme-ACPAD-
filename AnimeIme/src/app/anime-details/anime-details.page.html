@@ -1,0 +1,122 @@
+<!-- this creates the header section with back button and title -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ anime?.title || 'Anime Details' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- this displays the main anime details when loaded -->
+  <div class="anime-details" *ngIf="anime && !isLoading">
+    <!-- this shows the anime header with image and basic info -->
+    <div class="anime-header">
+      <div class="anime-image">
+        <img [src]="anime.picture_url" [alt]="anime.title">
+      </div>
+      <div class="anime-info">
+        <h1>{{ anime.title }}</h1>
+        <!-- this displays the anime score with star icon -->
+        <div class="score">
+          <ion-icon name="star"></ion-icon>
+          <span>{{ anime.score || 'N/A' }}</span>
+        </div>
+        <!-- this shows metadata like type, episodes, and status -->
+        <div class="meta">
+          <span>{{ anime.type }}</span>
+          <span>{{ anime.episodes }} episodes</span>
+          <span>{{ anime.status }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- this displays the anime synopsis -->
+    <div class="synopsis">
+      <h2>Synopsis</h2>
+      <p>{{ anime.synopsis }}</p>
+    </div>
+
+    <!-- this is the button to add anime to user's list -->
+    <ion-button expand="block" class="add-button" (click)="addToList()">
+      Add to My List
+    </ion-button>
+  </div>
+
+  <!-- this shows loading spinner while fetching data -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner></ion-spinner>
+    <p>Loading anime details...</p>
+  </div>
+
+  <!-- this displays error message if anime not found -->
+  <div class="error-container" *ngIf="!anime && !isLoading">
+    <h2>Anime not found</h2>
+    <p>The requested anime could not be found.</p>
+    <ion-button routerLink="/home">Return Home</ion-button>
+  </div>
+
+  <!-- this is the modal for adding anime to list -->
+  <ion-modal [isOpen]="isRatingModalOpen">
+    <ng-template>
+      <!-- this creates the modal header -->
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Add to List</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cancelRating()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h2>{{anime?.title}}</h2>
+        
+        <!-- this is the rating input slider -->
+        <ion-item>
+          <ion-label position="stacked">Rating</ion-label>
+          <ion-range
+            [min]="1"
+            [max]="10"
+            [pin]="true"
+            [snaps]="true"
+            [(ngModel)]="ratingValue"
+          >
+            <ion-label slot="start">1</ion-label>
+            <ion-label slot="end">10</ion-label>
+          </ion-range>
+        </ion-item>
+
+        <!-- this is the watching status dropdown -->
+        <ion-item>
+          <ion-label position="stacked">Status</ion-label>
+          <ion-select [(ngModel)]="selectedStatus" interface="action-sheet">
+            <ion-select-option value="watching">Currently Watching</ion-select-option>
+            <ion-select-option value="completed">Completed</ion-select-option>
+            <ion-select-option value="on hold">On Hold</ion-select-option>
+            <ion-select-option value="dropped">Dropped</ion-select-option>
+            <ion-select-option value="plan to watch">Plan to Watch</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- this is the episode progress input -->
+        <ion-item>
+          <ion-label position="stacked">Progress</ion-label>
+          <ion-input
+            type="number"
+            [(ngModel)]="progressValue"
+            [min]="0"
+            [max]="anime?.episodes || 0"
+            placeholder="Episodes watched"
+          ></ion-input>
+          <ion-note slot="end">/ {{anime?.episodes || '?'}}</ion-note>
+        </ion-item>
+
+        <!-- this is the submit button for the form -->
+        <ion-button expand="block" (click)="submitRating()" class="ion-margin-top">
+          Add to List
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content> 

@@ -1,0 +1,223 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="signOut()" *ngIf="isAuthenticated">
+        <ion-icon name="log-out-outline"></ion-icon>
+        Sign Out
+      </ion-button>
+    </ion-buttons>
+    <ion-title>AnimeIme</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="navigateToMyProfile()" [disabled]="!isAuthenticated">
+        MY PROFILE
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Centered search bar -->
+  <ion-toolbar>
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <!-- Add segment control above search bar -->
+        <ion-segment [(ngModel)]="searchType" class="search-type-segment">
+          <ion-segment-button value="users">
+            <ion-label>Users</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="anime">
+            <ion-label>Anime</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <ion-searchbar
+          [placeholder]="searchType === 'users' ? 'Search users by username...' : 'Search anime...'"
+          [debounce]="300"
+          (ionInput)="handleSearch($event)"
+          (keyup)="handleSearch($event)"
+          [(ngModel)]="searchQuery"
+          class="user-search"
+          [animated]="true"
+          [showClearButton]="'always'"
+        ></ion-searchbar>
+        <div class="search-icon" *ngIf="isSearching">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </div>
+      </div>
+      
+      <!-- User Results -->
+      <div class="search-results" *ngIf="searchType === 'users' && searchResults.length > 0">
+        <ion-list>
+          <ion-item *ngFor="let user of searchResults" (click)="navigateToProfile(user.username)" button detail>
+            <ion-avatar slot="start">
+              <img [src]="user.photoURL || 'assets/default-avatar.png'" alt="User avatar">
+            </ion-avatar>
+            <ion-label>
+              <h2>{{ user.username }}</h2>
+              <p>
+                <ion-icon name="film-outline"></ion-icon>
+                {{ user.animeCount || 0 }} anime in list
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <!-- Anime Results -->
+      <div class="search-results" *ngIf="searchType === 'anime' && animeResults.length > 0">
+        <ion-list>
+          <ion-item *ngFor="let anime of animeResults" (click)="navigateToAnime(anime)" button>
+            <ion-thumbnail slot="start">
+              <img [src]="anime.picture_url" [alt]="anime.title">
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ anime.title }}</h2>
+              <p>
+                <ion-icon name="star"></ion-icon>
+                {{ anime.score || 'N/A' }} • {{ anime.type }}
+                <span *ngIf="anime.episodes"> • {{ anime.episodes }} episodes</span>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+      
+      <!-- No Results Message -->
+      <div class="no-results" *ngIf="searchQuery && !isSearching && 
+           ((searchType === 'users' && searchResults.length === 0) || 
+            (searchType === 'anime' && animeResults.length === 0))">
+        <p>No {{ searchType }} found matching "{{ searchQuery }}"</p>
+      </div>
+    </div>
+  </ion-toolbar>
+
+  <!-- Navigation tabs -->
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" [value]="selectedTab">
+      <ion-segment-button value="top">
+        <ion-label>TOP ANIME</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="trending">
+        <ion-label>TRENDING</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="local">
+        <ion-label>POPULAR IN {{userCountry | uppercase}}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="new">
+        <ion-label>NEW/UPCOMING</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="anime-gpt">
+        <ion-label>AnimeGPT</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Add this before your search suggestions -->
+  <div class="search-overlay" *ngIf="searchResults.length > 0 || animeResults.length > 0" (click)="clearSearch()"></div>
+
+  <!-- Update your search suggestions -->
+  <div class="search-suggestions" *ngIf="searchResults.length > 0 || animeResults.length > 0">
+    <!-- Your existing search results content -->
+  </div>
+
+  <!-- Anime Results Section -->
+  <div class="anime-grid">
+    <div class="anime-card" *ngFor="let anime of animes">
+      <div class="anime-content" (click)="navigateToAnime(anime)">
+        <div class="anime-image">
+          <img [src]="anime.picture_url" [alt]="anime.title">
+          <div class="score-badge" *ngIf="anime.score">
+            ★ {{anime.score}}
+          </div>
+        </div>
+        <div class="anime-info">
+          <h3>{{anime.title}}</h3>
+          <div class="meta-info">
+            <span>{{anime.type}}</span>
+            <span>{{anime.episodes}} episodes</span>
+          </div>
+        </div>
+      </div>
+      <ion-button class="add-to-list-btn" expand="block" (click)="addToList(anime)">
+        ADD TO LIST
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Add this after your anime grid -->
+  <div class="load-more-container" *ngIf="!isLoading">
+    <ion-button 
+      *ngIf="hasMoreAnime"
+      (click)="loadMore()" 
+      expand="block" 
+      class="load-more-btn"
+      [disabled]="isLoadingMore"
+    >
+      <ion-spinner *ngIf="isLoadingMore" name="crescent"></ion-spinner>
+      <span *ngIf="!isLoadingMore">LOAD MORE</span>
+    </ion-button>
+  </div>
+
+  <!-- Keep the rest of your content (modals, etc.) -->
+</ion-content>
+
+<!-- Rating Modal -->
+<ion-modal [isOpen]="isRatingModalOpen">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Add to List</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="cancelRating()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <h2>{{selectedAnime?.title}}</h2>
+      
+      <!-- Rating -->
+      <ion-item>
+        <ion-label position="stacked">Rating</ion-label>
+        <ion-range
+          [min]="1"
+          [max]="10"
+          [pin]="true"
+          [snaps]="true"
+          [(ngModel)]="ratingValue"
+        >
+          <ion-label slot="start">1</ion-label>
+          <ion-label slot="end">10</ion-label>
+        </ion-range>
+      </ion-item>
+
+      <!-- Status Dropdown -->
+      <ion-item>
+        <ion-label position="stacked">Status</ion-label>
+        <ion-select [(ngModel)]="selectedStatus" interface="action-sheet">
+          <ion-select-option value="watching">Currently Watching</ion-select-option>
+          <ion-select-option value="completed">Completed</ion-select-option>
+          <ion-select-option value="on hold">On Hold</ion-select-option>
+          <ion-select-option value="dropped">Dropped</ion-select-option>
+          <ion-select-option value="plan to watch">Plan to Watch</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Progress -->
+      <ion-item>
+        <ion-label position="stacked">Progress</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="progressValue"
+          [min]="0"
+          [max]="selectedAnime?.episodes || 0"
+          placeholder="Episodes watched"
+        ></ion-input>
+        <ion-note slot="end">/ {{selectedAnime?.episodes || '?'}}</ion-note>
+      </ion-item>
+
+      <ion-button expand="block" (click)="submitRating()" class="ion-margin-top">
+        Add to List
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>

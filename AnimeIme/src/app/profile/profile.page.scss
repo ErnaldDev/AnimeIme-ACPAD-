@@ -1,0 +1,173 @@
+/* Global theme variables */
+:host {
+  --glass-bg: rgba(31, 31, 31, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Main content background styling */
+ion-content {
+  --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+/* Profile container layout */
+.profile-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* User information section styling */
+.user-info {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #fff;
+
+  h2 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  p {
+    color: #94a3b8;
+    margin: 8px 0 0;
+  }
+}
+
+/* Anime list container styling */
+.anime-list {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  overflow: hidden;
+
+  /* Section title styling */
+  h3 {
+    color: #fff;
+    padding: 20px;
+    margin: 0;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  /* List header styling */
+  .list-header {
+    display: flex;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom: 1px solid var(--glass-border);
+
+    /* Column layout */
+    .col {
+      flex: 1;
+      &.actions { flex: 0 0 80px; }
+    }
+
+    /* Score header with sorting */
+    .score-header {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #fff;
+      }
+
+      .sort-icon {
+        font-size: 16px;
+      }
+    }
+  }
+
+  /* List content styling */
+  .list-content {
+    .list-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--glass-border);
+      transition: background-color 0.2s;
+      color: #fff;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      /* Column styling */
+      .col {
+        flex: 1;
+        padding: 0 8px;
+
+        &:first-child { padding-left: 0; }
+        &:last-child { padding-right: 0; }
+        
+        /* Image column styling */
+        &.image-col {
+          flex: 0 0 60px;
+          img {
+            width: 45px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 4px;
+          }
+        }
+
+        /* Title column styling */
+        &.title {
+          flex: 2;
+          font-weight: 500;
+        }
+
+        /* Score column styling */
+        &.score {
+          color: #ffd700;
+        }
+
+        /* Status column styling */
+        &.status {
+          padding: 4px 8px;
+          border-radius: 12px;
+          text-align: center;
+          font-size: 12px;
+          width: fit-content;
+
+          /* Status colors */
+          &.watching { background: #3b82f6; }
+          &.completed { background: #22c55e; }
+          &.dropped { background: #ef4444; }
+          &.on-hold { background: #f59e0b; }
+          &.plan-to-watch { background: #8b5cf6; }
+        }
+
+        /* Actions column styling */
+        &.actions {
+          flex: 0 0 80px;
+          text-align: right;
+
+          ion-button {
+            --padding-start: 8px;
+            --padding-end: 8px;
+            height: 36px;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Loading and not found states styling */
+.loading-container,
+.not-found-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-align: center;
+  padding: 20px;
+}

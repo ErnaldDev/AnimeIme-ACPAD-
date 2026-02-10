@@ -1,0 +1,53 @@
+<!-- Header section with dynamic title -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ isLogin ? 'Login' : 'Sign Up' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Main content section with authentication form -->
+<ion-content class="ion-padding">
+  <div class="auth-container">
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      <!-- Username field (only shown for signup) -->
+      <ion-item *ngIf="!isLogin">
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="text" formControlName="username"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="!isLogin && authForm.get('username')?.touched && authForm.get('username')?.errors?.['required']">
+        <p>Username is required</p>
+      </ion-text>
+
+      <!-- Email field with validation -->
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="authForm.get('email')?.touched && authForm.get('email')?.errors?.['required']">
+        <p>Email is required</p>
+      </ion-text>
+
+      <!-- Password field with validation -->
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.errors?.['required']">
+        <p>Password is required</p>
+      </ion-text>
+
+      <!-- Button container for form actions -->
+      <div class="button-container">
+        <!-- Submit button -->
+        <ion-button expand="block" type="submit" [disabled]="!authForm.valid" class="main-button">
+          {{ isLogin ? 'Login' : 'Sign Up' }}
+        </ion-button>
+
+        <!-- Toggle mode button -->
+        <ion-button expand="block" fill="clear" (click)="toggleAuthMode()" class="toggle-button">
+          {{ isLogin ? 'Need an account? Sign Up' : 'Already have an account? Login' }}
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

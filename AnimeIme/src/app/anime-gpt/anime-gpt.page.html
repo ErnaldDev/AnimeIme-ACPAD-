@@ -1,0 +1,151 @@
+<!-- this creates the header with back navigation -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>AnimeGPT</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- this is the main container for the GPT interface -->
+  <div class="gpt-container">
+    <!-- this displays the search section with title and description -->
+    <div class="glass-card">
+      <h1 class="title">Anime Recommendations</h1>
+      <p class="subtitle">Enter an anime you like to get personalized recommendations</p>
+      
+      <!-- this is the search input section -->
+      <div class="search-container">
+        <ion-searchbar
+          class="custom-searchbar"
+          [(ngModel)]="searchQuery"
+          placeholder="Enter anime name..."
+          [debounce]="300"
+        ></ion-searchbar>
+        
+        <!-- this is the button to trigger recommendations -->
+        <ion-button
+          expand="block"
+          class="get-recommendations-btn"
+          (click)="getRecommendations()"
+          [disabled]="!searchQuery.trim()"
+        >
+          Get Recommendations
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- this shows the loading spinner while fetching recommendations -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Finding recommendations...</p>
+    </div>
+
+    <!-- this displays the grid of recommended anime -->
+    <div class="results-container" *ngIf="recommendations.length > 0 && !isLoading">
+      <!-- this creates individual anime cards -->
+      <div class="anime-card" *ngFor="let anime of recommendations">
+        <div class="anime-content" (click)="navigateToAnime(anime)">
+          <!-- this shows the anime image and genres -->
+          <div class="anime-image">
+            <img [src]="anime.imageUrl" [alt]="anime.title">
+            <div class="genre-tags">
+              <span class="tag" *ngFor="let genre of anime.genres.slice(0, 2)">
+                {{genre}}
+              </span>
+            </div>
+          </div>
+          
+          <!-- this displays the anime information -->
+          <div class="anime-info">
+            <h3>{{anime.title}}</h3>
+            <p class="description">{{anime.description}}</p>
+            <div class="score">
+              <ion-icon name="star"></ion-icon>
+              {{anime.score}}
+            </div>
+          </div>
+        </div>
+        
+        <!-- this is the button to add anime to user's list -->
+        <ion-button
+          class="add-to-list-btn"
+          expand="block"
+          (click)="addToList(anime)"
+        >
+          Add to List
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- this is the modal for rating and adding anime -->
+  <ion-modal [isOpen]="isRatingModalOpen">
+    <ng-template>
+      <!-- this creates the modal header -->
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Add to List</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cancelRating()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <!-- this is the modal content for rating and status -->
+      <ion-content class="ion-padding">
+        <h2>{{selectedAnime?.title}}</h2>
+        
+        <!-- this is the rating input slider -->
+        <ion-item>
+          <ion-label position="stacked">Rating</ion-label>
+          <ion-range
+            [min]="1"
+            [max]="10"
+            [pin]="true"
+            [snaps]="true"
+            [(ngModel)]="ratingValue"
+          >
+            <ion-label slot="start">1</ion-label>
+            <ion-label slot="end">10</ion-label>
+          </ion-range>
+        </ion-item>
+
+        <!-- this is the watching status dropdown -->
+        <ion-item>
+          <ion-label position="stacked">Status</ion-label>
+          <ion-select [(ngModel)]="selectedStatus" interface="action-sheet">
+            <ion-select-option value="watching">Currently Watching</ion-select-option>
+            <ion-select-option value="completed">Completed</ion-select-option>
+            <ion-select-option value="on hold">On Hold</ion-select-option>
+            <ion-select-option value="dropped">Dropped</ion-select-option>
+            <ion-select-option value="plan to watch">Plan to Watch</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- this is the episode progress input -->
+        <ion-item>
+          <ion-label position="stacked">Progress</ion-label>
+          <ion-input
+            type="number"
+            [(ngModel)]="progressValue"
+            [min]="0"
+            [max]="selectedAnime?.episodes || 0"
+            placeholder="Episodes watched"
+          ></ion-input>
+          <ion-note slot="end">/ {{selectedAnime?.episodes || '?'}}</ion-note>
+        </ion-item>
+
+        <!-- this is the submit button for the form -->
+        <ion-button expand="block" (click)="submitRating()" class="ion-margin-top">
+          Add to List
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

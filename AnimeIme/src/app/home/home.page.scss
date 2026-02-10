@@ -1,0 +1,410 @@
+//global theme variables
+:host {
+  --glass-bg: rgba(31, 31, 31, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --hover-bg: rgba(74, 158, 255, 0.1);
+}
+
+//main content styling with gradient background
+ion-content {
+  --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --z-index: 1;
+}
+
+//navigation tabs styling with glassmorphism effect
+.nav-tabs {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  //button styling within nav tabs
+  ion-button {
+    --background: transparent;
+    --background-hover: var(--hover-bg);
+    --ripple-color: transparent;
+    --color: #fff;
+    font-weight: 500;
+    text-transform: none;
+    transition: all 0.3s ease;
+
+    //active state styling
+    &.active {
+      --background: var(--hover-bg);
+      --color: #4a9eff;
+    }
+  }
+}
+
+//anime grid layout configuration
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+//individual anime card styling
+.anime-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  //hover effect for cards
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  //anime image container styling
+  .anime-image {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+
+    //image styling
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    //score badge styling
+    .score-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(4px);
+    }
+  }
+
+  //anime information section styling
+  .anime-info {
+    padding: 16px;
+
+    //title styling
+    h3 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+
+    //metadata styling
+    .meta-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    //add button styling
+    .add-button {
+      --background: transparent;
+      --background-hover: var(--hover-bg);
+      --border-color: var(--glass-border);
+      --color: #4a9eff;
+      width: 100%;
+      margin-top: 8px;
+      height: 36px;
+      font-size: 0.9rem;
+
+      &:hover {
+        --background: var(--hover-bg);
+      }
+    }
+  }
+
+  .anime-content {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+//responsive design for smaller screens
+@media (max-width: 768px) {
+  .anime-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+//header styling
+ion-header {
+  z-index: 1000;
+  position: relative;
+
+  //toolbar styling
+  ion-toolbar {
+    --min-height: 44px;
+    --padding-top: 0;
+    --padding-bottom: 0;
+
+    &:last-child {
+      --border-width: 0;
+    }
+  }
+
+  //segment styling
+  ion-segment {
+    --background: rgba(31, 31, 31, 0.95);
+    min-height: 36px;
+    margin: 4px 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    ion-segment-button {
+      --background: transparent;
+      --background-checked: rgba(74, 158, 255, 0.15);
+      --color: #94a3b8;
+      --color-checked: #4a9eff;
+      --indicator-color: transparent;
+      min-height: 32px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      
+      &::part(indicator) {
+        display: none;
+      }
+
+      &.segment-button-checked {
+        --color: #4a9eff;
+      }
+
+      ion-label {
+        margin: 0;
+        padding: 4px 8px;
+      }
+
+      &:hover {
+        --background: rgba(74, 158, 255, 0.05);
+      }
+    }
+  }
+
+  // Style the top toolbar with logo and profile buttons
+  ion-toolbar:first-child {
+    --background: rgba(31, 31, 31, 0.95);
+    backdrop-filter: blur(10px);
+
+    ion-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      height: 32px;
+      font-size: 0.9rem;
+
+      &::part(native) {
+        padding: 0 8px;
+      }
+    }
+  }
+
+  // Style the search toolbar
+  ion-toolbar:nth-child(2) {
+    --background: rgba(31, 31, 31, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0 8px;
+
+    .search-container {
+      padding: 4px;
+      margin: 0;
+
+      .custom-searchbar {
+        --background: rgba(255, 255, 255, 0.05);
+        --border-radius: 8px;
+        --box-shadow: none;
+        --placeholder-color: #94a3b8;
+        --icon-color: #94a3b8;
+        --height: 36px;
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+}
+
+//search functionality styling
+.search-container {
+  position: relative;
+  width: 100%;
+  z-index: 1002;
+}
+
+//search overlay styling
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  backdrop-filter: blur(2px);
+}
+
+.search-suggestions {
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: 9999;
+  background: rgba(31, 31, 31, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  ion-list {
+    background: transparent;
+    padding: 8px;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: #fff;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --min-height: 40px;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    border-radius: 8px;
+
+    &:hover {
+      --background: rgba(74, 158, 255, 0.1);
+    }
+
+    ion-thumbnail {
+      --size: 45px;
+      margin-right: 12px;
+
+      img {
+        border-radius: 4px;
+      }
+    }
+
+    ion-label {
+      h2 {
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: #94a3b8;
+
+        ion-icon {
+          font-size: 0.9rem;
+          margin-right: 4px;
+          color: #ffd700;
+        }
+      }
+    }
+  }
+}
+
+//load more button container styling
+.load-more-container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  
+  //load more button styling
+  .load-more-btn {
+    --background: var(--glass-bg);
+    --background-hover: var(--hover-bg);
+    --color: #4a9eff;
+    max-width: 300px;
+    width: 100%;
+    height: 48px;
+    margin: 0 auto;
+    
+    &:hover {
+      --background: var(--hover-bg);
+    }
+    
+    //spinner styling
+    ion-spinner {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+//navigation bar size adjustments
+ion-segment {
+  --background: var(--glass-bg);
+  padding: 4px;
+  border-radius: 8px;
+  margin: 4px 8px;
+
+  //segment button styling
+  ion-segment-button {
+    min-height: 32px;
+    font-size: 0.85rem;
+    
+    ion-label {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Adjust header toolbar height
+ion-toolbar {
+  --min-height: 48px;
+  padding: 4px 0;
+}
+
+// Adjust searchbar size
+.custom-searchbar {
+  --height: 40px;
+  margin: 4px 0;
+}
+
+// Adjust the search container spacing
+.search-container {
+  padding: 0 8px;
+  margin-bottom: 8px;
+}

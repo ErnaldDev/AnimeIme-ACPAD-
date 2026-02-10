@@ -1,0 +1,84 @@
+//main content background styling
+ion-content {
+  --background: #1f1f1f;
+}
+
+//container for authentication form
+.auth-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+//form input item styling
+ion-item {
+  --background: #2b2b2b;
+  --color: #fff;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  
+  &::part(native) {
+    padding: 8px;
+  }
+}
+
+//label styling
+ion-label {
+  color: #888;
+}
+
+//input field styling
+ion-input {
+  --color: #fff;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+//button container styling
+.button-container {
+  margin-top: 32px;
+
+  //main action button styling
+  .main-button {
+    --background: #3db4f2;
+    --color: #fff;
+    --border-radius: 8px;
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+    margin: 0;
+    
+    //disabled state styling
+    &:disabled {
+      --background: #2b2b2b;
+      --opacity: 0.7;
+    }
+  }
+
+  //toggle button styling
+  .toggle-button {
+    --color: #3db4f2;
+    --border-radius: 8px;
+    margin-top: 16px;
+    
+    //hover state styling
+    &:hover {
+      --background: rgba(61, 180, 242, 0.1);
+    }
+  }
+}
+
+//validation error message styling
+ion-text {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: -12px;
+  margin-bottom: 16px;
+  padding-left: 16px;
+  display: block;
+}
+
+//toolbar styling
+ion-toolbar {
+  --background: #2b2b2b;
+  --color: #fff;
+}
